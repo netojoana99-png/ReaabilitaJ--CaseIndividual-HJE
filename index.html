@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ReabilitaJá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #0f1923;
+  --ink-soft:  #4a5568;
+  --ink-mute:  #94a3b8;
+  --surface:   #ffffff;
+  --ground:    #f0f4f8;
+  --border:    #dde3ec;
+  --accent:    #1a56db;
+  --accent-lt: #eff4ff;
+  --green:     #059669;
+  --green-lt:  #ecfdf5;
+  --red:       #dc2626;
+  --red-lt:    #fef2f2;
+  --amber:     #d97706;
+  --amber-lt:  #fffbeb;
+  --radius:    12px;
+  --shadow:    0 2px 12px rgba(15,25,35,.07);
+  --shadow-lg: 0 8px 32px rgba(15,25,35,.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--ground);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ─── TOPBAR ─── */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+}
+.topbar-sep { color: var(--border); }
+.topbar-sub { font-size: 13px; color: var(--ink-mute); font-weight: 400; }
+
+/* ─── LAYOUT ─── */
+.wrapper { max-width: 1060px; margin: 0 auto; padding: 36px 20px 80px; }
+
+/* ─── SCREENS ─── */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeUp .25s ease; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── PAGE HEADER ─── */
+.page-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+.page-header p {
+  font-size: 14px;
+  color: var(--ink-mute);
+  margin-top: 3px;
+}
+
+/* ─── BACK BUTTON ─── */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-lt);
+  border: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s;
+  text-decoration: none;
+}
+.back-btn:hover { background: #dce8ff; }
+
+/* ─── CARD ─── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #fafbfc;
+  border-bottom: 1px solid var(--border);
+}
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink-mute);
+}
+
+/* ─── PATIENT LIST CARD ─── */
+.patient-item {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .12s;
+}
+.patient-item:last-child { border-bottom: none; }
+.patient-item:hover { background: var(--ground); }
+
+.patient-name { font-weight: 600; font-size: 15px; }
+.patient-cpf  { font-size: 12px; color: var(--ink-mute); margin-top: 2px; }
+
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.tag-blue   { background: var(--accent-lt); color: var(--accent); }
+.tag-green  { background: var(--green-lt);  color: var(--green);  }
+
+.col-label {
+  font-size: 11px;
+  color: var(--ink-mute);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 4px;
+}
+.col-value { font-size: 14px; font-weight: 500; }
+
+/* ─── DOR BADGE ─── */
+.dor-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 15px;
+}
+.dor-0  { background: #dcfce7; color: #166534; }
+.dor-1, .dor-2, .dor-3 { background: #d1fae5; color: #065f46; }
+.dor-4, .dor-5  { background: #fef9c3; color: #854d0e; }
+.dor-6, .dor-7  { background: #ffedd5; color: #9a3412; }
+.dor-8, .dor-9, .dor-10 { background: #fee2e2; color: #991b1b; }
+.dor-null { background: var(--ground); color: var(--ink-mute); font-size: 13px; }
+
+/* ─── TABLE ─── */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  padding: 11px 16px;
+  background: #fafbfc;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-mute);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.data-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  vertical-align: top;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--ground); }
+
+/* ─── DETAIL GRID ─── */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+@media (max-width: 700px) {
+  .detail-grid { grid-template-columns: 1fr; }
+  .patient-item { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── FIELD ROWS (form) ─── */
+.field-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 13px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.field-row:last-child { border-bottom: none; }
+.field-row label { font-size: 14px; font-weight: 600; padding-top: 9px; }
+.req { color: var(--red); }
+
+input[type="text"], input[type="date"], input[type="number"], textarea, select {
+  width: 100%;
+  padding: 9px 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  background: white;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(26,86,219,.1);
+}
+textarea { resize: vertical; min-height: 80px; }
+
+/* ─── VITALS GRID ─── */
+.vitals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 18px 20px;
+}
+.vital-item label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-mute); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .06em; }
+
+/* ─── BUTTONS ─── */
+.btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; font-size: 14px; font-weight: 600; border: none; border-radius: 9px; cursor: pointer; transition: opacity .15s, transform .1s; font-family: inherit; }
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { opacity: .88; }
+.btn-green   { background: var(--green); color: white; }
+.btn-green:hover { opacity: .88; }
+.btn-danger  { background: var(--red); color: white; }
+.btn-danger:hover { opacity: .88; }
+.btn-ghost   { background: var(--ground); color: var(--ink); }
+.btn-ghost:hover { background: var(--border); }
+
+/* ─── BTN ROW ─── */
+.btn-row { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+
+/* ─── STATUS TOAST ─── */
+.toast {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .25s, transform .25s;
+  pointer-events: none;
+  z-index: 999;
+  max-width: 320px;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: var(--green-lt); color: var(--green); border: 1.5px solid #a7f3d0; }
+.toast.error   { background: var(--red-lt);   color: var(--red);   border: 1.5px solid #fca5a5; }
+
+/* ─── INLINE FEEDBACK ─── */
+.inline-ok {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green);
+  padding: 8px 14px;
+  background: var(--green-lt);
+  border-radius: 8px;
+  border: 1px solid #a7f3d0;
+}
+.inline-ok.show { display: inline-flex; animation: fadeUp .2s ease; }
+
+/* ─── ANOTAÇÕES ─── */
+.anotacao-item {
+  padding: 14px 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.anotacao-item:last-child { border-bottom: none; }
+.anotacao-meta { font-size: 11px; color: var(--ink-mute); margin-bottom: 5px; }
+.anotacao-texto { font-size: 14px; line-height: 1.55; }
+
+/* ─── EMPTY STATE ─── */
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ink-mute);
+  font-size: 14px;
+}
+.empty-icon { font-size: 32px; margin-bottom: 10px; }
+
+/* ─── STAT PILLS ─── */
+.stat-row {
+  display: flex;
+  gap: 12px;
+  padding: 14px 20px;
+  flex-wrap: wrap;
+}
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 18px;
+  background: var(--ground);
+  border-radius: 10px;
+  min-width: 100px;
+}
+.stat-pill .s-label { font-size: 11px; font-weight: 600; color: var(--ink-mute); text-transform: uppercase; letter-spacing: .06em; }
+.stat-pill .s-val   { font-size: 20px; font-weight: 700; margin-top: 4px; }
+
+/* ─── SPINNER ─── */
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── TABLE HEADERS (listagem) ─── */
+.list-header {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr auto;
+  gap: 12px;
+  padding: 11px 20px;
+  background: #fafbfc;
+  border-bottom: 1px solid var(--border);
+}
+.lh-col {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-mute);
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">ReabilitaJá</span>
+  <span class="topbar-sep">—</span>
+  <span class="topbar-sub">Fisioterapia domiciliar</span>
+</div>
+
+<div class="wrapper">
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 1 — LISTAGEM DE PACIENTES
+  ═══════════════════════════════════════════ -->
+  <div class="screen active" id="screen-lista">
+
+    <div class="page-header">
+      <div>
+        <h1>Seus pacientes</h1>
+        <p>Acompanhe o progresso e o nível de dor de cada atendimento.</p>
+      </div>
+      <button class="btn btn-primary" onclick="irPara('screen-novo')">
+        ＋ Novo atendimento
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="list-header">
+        <span class="lh-col">Paciente</span>
+        <span class="lh-col">Protocolo</span>
+        <span class="lh-col">Última sessão</span>
+        <span class="lh-col">Dor recente</span>
+        <span class="lh-col"></span>
+      </div>
+      <div id="listagemPacientes">
+        <div class="empty">
+          <div class="empty-icon">🦴</div>
+          Carregando pacientes...
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 2 — NOVO ATENDIMENTO (CADASTRO)
+  ═══════════════════════════════════════════ -->
+  <div class="screen" id="screen-novo">
+
+    <div class="page-header">
+      <div>
+        <h1>Novo atendimento</h1>
+        <p>Preencha os dados do paciente.</p>
+      </div>
+      <button class="back-btn" onclick="irPara('screen-lista')">
+        ← Voltar à lista
+      </button>
+    </div>
+
+    <div id="statusCadastro"></div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Identificação</span></div>
+      <div class="field-row">
+        <label>Nome <span class="req">*</span></label>
+        <input id="f-nome" type="text" placeholder="Nome completo"/>
+      </div>
+      <div class="field-row">
+        <label>CPF <span class="req">*</span></label>
+        <input id="f-cpf" type="text" placeholder="000.000.000-00"/>
+      </div>
+      <div class="field-row">
+        <label>Nascimento <span class="req">*</span></label>
+        <input id="f-nasc" type="date"/>
+      </div>
+      <div class="field-row">
+        <label>Protocolo</label>
+        <input id="f-protocolo" type="text" placeholder="Ex: Reabilitação de joelho — fase 2"/>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Queixa clínica</span></div>
+      <div class="field-row">
+        <label>Queixa principal <span class="req">*</span></label>
+        <input id="f-queixa" type="text" placeholder="Ex: Dor lombar crônica"/>
+      </div>
+      <div class="field-row">
+        <label>Observações</label>
+        <textarea id="f-obs" placeholder="Histórico relevante, comorbidades…"></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><span class="card-title">Sinais vitais</span></div>
+      <div class="vitals-grid">
+        <div class="vital-item">
+          <label>Pressão <span class="req">*</span></label>
+          <input id="f-pressao" type="text" placeholder="mmHg"/>
+        </div>
+        <div class="vital-item">
+          <label>Temperatura <span class="req">*</span></label>
+          <input id="f-temp" type="number" step="0.1" placeholder="°C"/>
+        </div>
+        <div class="vital-item">
+          <label>Freq. cardíaca <span class="req">*</span></label>
+          <input id="f-fc" type="number" placeholder="BPM"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="salvarProntuario()">
+        Salvar atendimento
+      </button>
+      <button class="btn btn-ghost" onclick="limparFormulario()">Limpar</button>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 3 — DETALHE DO PACIENTE
+  ═══════════════════════════════════════════ -->
+  <div class="screen" id="screen-detalhe">
+
+    <div class="page-header">
+      <div>
+        <h1 id="det-nome">—</h1>
+        <p id="det-sub">—</p>
+      </div>
+      <button class="back-btn" onclick="irPara('screen-lista')">
+        ← Voltar à lista
+      </button>
+    </div>
+
+    <!-- Stats rápidos -->
+    <div class="card" style="margin-bottom:20px;">
+      <div class="stat-row" id="det-stats"></div>
+    </div>
+
+    <div class="detail-grid">
+
+      <!-- COLUNA ESQUERDA -->
+      <div>
+
+        <!-- Histórico: últimas 7 sessões -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Histórico últimas 7 sessões</span>
+            <button class="btn btn-green" style="padding:6px 14px; font-size:12px;"
+              onclick="abrirModalSessao()">+ Sessão</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Exercícios concluídos</th>
+                <th>Dor</th>
+              </tr>
+            </thead>
+            <tbody id="det-sessoes"></tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- COLUNA DIREITA -->
+      <div>
+
+        <!-- ANOTAÇÃO CLÍNICA
+             ─────────────────────────────────────────
+             O botão "Salvar observação" chama salvarAnotacao()
+             que faz um fetch() POST para /anotacao/<cpf>
+             e atualiza a lista de anotações SEM recarregar a página.
+             ─────────────────────────────────────────
+        -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Nova anotação clínica</span>
+          </div>
+          <div style="padding:16px 20px;">
+            <textarea id="anotacao-texto" rows="4"
+              placeholder="Escreva uma observação clínica…"></textarea>
+
+            <div style="display:flex; align-items:center; gap:12px; margin-top:12px; flex-wrap:wrap;">
+              <button class="btn btn-primary" id="btn-salvar-anotacao"
+                onclick="salvarAnotacao()">
+                Salvar observação
+              </button>
+              <!-- Feedback inline — aparece sem recarregar -->
+              <span class="inline-ok" id="anotacao-ok">
+                ✓ Observação salva
+              </span>
+            </div>
+
+            <!--
+            ══════════════════════════════════════════════════════
+             EXPLICAÇÃO DO FETCH — como este botão funciona:
+
+             async function salvarAnotacao() {
+               const texto = document.getElementById('anotacao-texto').value;
+
+               // 1) Chama o backend sem recarregar a página
+               const resp = await fetch(`/anotacao/${cpfAtivo}`, {
+                 method: 'POST',
+                 headers: { 'Content-Type': 'application/json' },
+                 body: JSON.stringify({ texto })
+               });
+
+               const resultado = await resp.json();
+
+               if (resp.ok) {
+                 // 2) Insere a nova anotação no topo da lista (sem reload)
+                 prependAnotacao(resultado.anotacao);
+                 // 3) Exibe feedback visual inline
+                 mostrarOkInline();
+               }
+             }
+            ══════════════════════════════════════════════════════
+            -->
+          </div>
+        </div>
+
+        <!-- Lista de anotações salvas -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Anotações clínicas</span>
+          </div>
+          <div id="det-anotacoes">
+            <div class="empty"><div class="empty-icon">📋</div>Nenhuma anotação ainda.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sessão modal / form inline -->
+    <div class="card" id="form-sessao" style="display:none; margin-top:20px;">
+      <div class="card-header">
+        <span class="card-title">Registrar nova sessão</span>
+        <button class="btn btn-ghost" style="padding:5px 12px; font-size:12px;"
+          onclick="document.getElementById('form-sessao').style.display='none'">✕ Fechar</button>
+      </div>
+      <div class="field-row">
+        <label>Exercícios concluídos <span class="req">*</span></label>
+        <textarea id="s-exercicios" placeholder="Ex: 3×15 agachamento, 3×10 extensão de quadril…"></textarea>
+      </div>
+      <div class="field-row">
+        <label>Nível de dor (0–10) <span class="req">*</span></label>
+        <input id="s-dor" type="number" min="0" max="10" placeholder="0 = sem dor, 10 = máxima"/>
+      </div>
+      <div class="btn-row" style="padding: 0 20px 18px;">
+        <button class="btn btn-green" onclick="salvarSessao()">Salvar sessão</button>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /wrapper -->
+
+<!-- TOAST global -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// ESTADO GLOBAL
+// ═══════════════════════════════════════════════════
+let cpfAtivo = null;   // CPF do paciente no detalhe
+
+// ═══════════════════════════════════════════════════
+// NAVEGAÇÃO ENTRE TELAS
+// ═══════════════════════════════════════════════════
+function irPara(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'screen-lista') carregarLista();
+}
+
+// ═══════════════════════════════════════════════════
+// TOAST (feedback global)
+// ═══════════════════════════════════════════════════
+let toastTimer;
+function showToast(tipo, msg) {
+  const t = document.getElementById('toast');
+  t.className = 'toast show ' + tipo;
+  t.textContent = msg;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = 'toast'; }, 3200);
+}
+
+// ═══════════════════════════════════════════════════
+// DOR → badge colorido
+// ═══════════════════════════════════════════════════
+function dorBadge(dor) {
+  if (dor === null || dor === undefined) {
+    return '<span class="dor-badge dor-null">–</span>';
+  }
+  const d = parseInt(dor);
+  return `<span class="dor-badge dor-${d}">${d}</span>`;
+}
+
+// ═══════════════════════════════════════════════════
+// SCREEN 1 — CARREGAR LISTA DE PACIENTES
+// ═══════════════════════════════════════════════════
+async function carregarLista() {
+  const container = document.getElementById('listagemPacientes');
+  container.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div>Carregando…</div>';
+
+  try {
+    const resp = await fetch('/prontuarios');
+    const lista = await resp.json();
+
+    if (!lista.length) {
+      container.innerHTML = '<div class="empty"><div class="empty-icon">🦴</div>Nenhum paciente cadastrado ainda.</div>';
+      return;
+    }
+
+    container.innerHTML = lista.map(p => `
+      <div class="patient-item" onclick="abrirDetalhe('${p.cpf}')">
+        <div>
+          <div class="patient-name">${p.nome}</div>
+          <div class="patient-cpf">CPF: ${p.cpf}</div>
+        </div>
+        <div>
+          <span class="tag tag-blue">${p.protocolo || 'A definir'}</span>
+        </div>
+        <div>
+          <div class="col-label">Última sessão</div>
+          <div class="col-value" style="font-size:13px;">${p.ultima_sessao || '—'}</div>
+        </div>
+        <div>
+          <div class="col-label">Dor</div>
+          ${dorBadge(p.dor_recente)}
+        </div>
+        <div>
+          <button class="btn btn-danger" style="padding:7px 12px; font-size:12px;"
+            onclick="event.stopPropagation(); deletar('${p.cpf}')">Apagar</button>
+        </div>
+      </div>
+    `).join('');
+
+  } catch(e) {
+    container.innerHTML = '<div class="empty">Erro ao carregar dados.</div>';
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// SCREEN 3 — ABRIR DETALHE DO PACIENTE
+// ═══════════════════════════════════════════════════
+async function abrirDetalhe(cpf) {
+  cpfAtivo = cpf;
+  irPara('screen-detalhe');
+
+  // Reset
+  document.getElementById('det-nome').textContent = 'Carregando…';
+  document.getElementById('det-sub').textContent  = '';
+  document.getElementById('det-stats').innerHTML  = '';
+  document.getElementById('det-sessoes').innerHTML = '';
+  document.getElementById('det-anotacoes').innerHTML = '<div class="empty">⏳ Carregando…</div>';
+
+  try {
+    const resp    = await fetch(`/prontuarios/${cpf}`);
+    const paciente = await resp.json();
+
+    // Cabeçalho
+    document.getElementById('det-nome').textContent = paciente.nome;
+    document.getElementById('det-sub').textContent  =
+      `CPF: ${paciente.cpf}  ·  Nascimento: ${paciente.nascimento}  ·  Queixa: ${paciente.queixa}`;
+
+    // Stats rápidos
+    const sessoes  = paciente.sessoes_recentes || [];
+    const dor      = sessoes.length ? sessoes[0].dor : null;
+    document.getElementById('det-stats').innerHTML = `
+      <div class="stat-pill">
+        <span class="s-label">Protocolo</span>
+        <span class="s-val" style="font-size:15px;">${paciente.protocolo || 'A definir'}</span>
+      </div>
+      <div class="stat-pill">
+        <span class="s-label">Total de sessões</span>
+        <span class="s-val">${(paciente.sessoes || []).length}</span>
+      </div>
+      <div class="stat-pill">
+        <span class="s-label">Dor recente</span>
+        <span class="s-val">${dor !== null ? dor + '/10' : '—'}</span>
+      </div>
+      <div class="stat-pill">
+        <span class="s-label">Cadastro</span>
+        <span class="s-val" style="font-size:13px;">${paciente.horario}</span>
+      </div>
+    `;
+
+    // Tabela de sessões (últimas 7)
+    const tbody = document.getElementById('det-sessoes');
+    if (!sessoes.length) {
+      tbody.innerHTML = '<tr><td colspan="3" class="empty">Nenhuma sessão registrada.</td></tr>';
+    } else {
+      tbody.innerHTML = sessoes.map(s => `
+        <tr>
+          <td style="white-space:nowrap; color:var(--ink-mute); font-size:13px;">${s.data}</td>
+          <td>${s.exercicios}</td>
+          <td>${dorBadge(s.dor)}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Anotações
+    renderAnotacoes(paciente.anotacoes || []);
+
+  } catch(e) {
+    showToast('error', 'Erro ao carregar dados do paciente.');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// RENDERIZAR LISTA DE ANOTAÇÕES
+// ═══════════════════════════════════════════════════
+function renderAnotacoes(lista) {
+  const el = document.getElementById('det-anotacoes');
+  if (!lista.length) {
+    el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div>Nenhuma anotação ainda.</div>';
+    return;
+  }
+  el.innerHTML = lista.map(a => `
+    <div class="anotacao-item">
+      <div class="anotacao-meta">📌 ${a.horario}</div>
+      <div class="anotacao-texto">${a.texto}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// INSERIR ANOTAÇÃO NO TOPO SEM RECARREGAR
+// ═══════════════════════════════════════════════════
+function prependAnotacao(anotacao) {
+  const el = document.getElementById('det-anotacoes');
+  // Remove "nenhuma anotação" se existir
+  const emptyEl = el.querySelector('.empty');
+  if (emptyEl) emptyEl.remove();
+
+  const div = document.createElement('div');
+  div.className = 'anotacao-item';
+  div.style.animation = 'fadeUp .25s ease';
+  div.innerHTML = `
+    <div class="anotacao-meta">📌 ${anotacao.horario}</div>
+    <div class="anotacao-texto">${anotacao.texto}</div>
+  `;
+  el.prepend(div);
+}
+
+// ═══════════════════════════════════════════════════
+// SALVAR ANOTAÇÃO — via fetch(), SEM recarregar página
+// ═══════════════════════════════════════════════════
+async function salvarAnotacao() {
+  const textarea = document.getElementById('anotacao-texto');
+  const texto    = textarea.value.trim();
+  const btnSalvar = document.getElementById('btn-salvar-anotacao');
+  const okEl     = document.getElementById('anotacao-ok');
+
+  if (!texto) {
+    showToast('error', 'Escreva uma observação antes de salvar.');
+    return;
+  }
+
+  // Spinner enquanto aguarda resposta
+  btnSalvar.innerHTML = '<span class="spinner"></span> Salvando…';
+  btnSalvar.disabled  = true;
+
+  try {
+    // ─── FETCH ────────────────────────────────────────────
+    //  Envia POST para /anotacao/<cpf> com o texto no body
+    const resp = await fetch(`/anotacao/${cpfAtivo}`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ texto })
+    });
+
+    const resultado = await resp.json();
+    // ──────────────────────────────────────────────────────
+
+    if (!resp.ok) {
+      showToast('error', resultado.erro || 'Erro ao salvar.');
+      return;
+    }
+
+    // 1) Insere a anotação recém-criada no topo da lista — sem reload
+    prependAnotacao(resultado.anotacao);
+
+    // 2) Limpa o campo
+    textarea.value = '';
+
+    // 3) Exibe confirmação visual inline (badge verde)
+    okEl.classList.add('show');
+    setTimeout(() => okEl.classList.remove('show'), 3000);
+
+  } catch(e) {
+    showToast('error', 'Erro de conexão com servidor.');
+  } finally {
+    btnSalvar.innerHTML = 'Salvar observação';
+    btnSalvar.disabled  = false;
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// MODAL SESSÃO
+// ═══════════════════════════════════════════════════
+function abrirModalSessao() {
+  const f = document.getElementById('form-sessao');
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════
+// SALVAR SESSÃO — via fetch()
+// ═══════════════════════════════════════════════════
+async function salvarSessao() {
+  const exercicios = document.getElementById('s-exercicios').value.trim();
+  const dor        = document.getElementById('s-dor').value;
+
+  if (!exercicios || dor === '') {
+    showToast('error', 'Preencha os exercícios e o nível de dor.');
+    return;
+  }
+
+  try {
+    const resp = await fetch(`/sessao/${cpfAtivo}`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ exercicios, dor: parseInt(dor) })
+    });
+
+    const resultado = await resp.json();
+    if (!resp.ok) { showToast('error', resultado.erro); return; }
+
+    showToast('success', 'Sessão registrada com sucesso!');
+
+    // Insere nova sessão no topo da tabela sem recarregar tudo
+    const s    = resultado.sessao;
+    const tbody = document.getElementById('det-sessoes');
+    const emptyRow = tbody.querySelector('td[colspan]');
+    if (emptyRow) tbody.innerHTML = '';
+
+    // Mantém máx. 7 linhas
+    const linhas = tbody.querySelectorAll('tr');
+    if (linhas.length >= 7) linhas[linhas.length - 1].remove();
+
+    const tr = document.createElement('tr');
+    tr.style.animation = 'fadeUp .2s ease';
+    tr.innerHTML = `
+      <td style="white-space:nowrap; color:var(--ink-mute); font-size:13px;">${s.data}</td>
+      <td>${s.exercicios}</td>
+      <td>${dorBadge(s.dor)}</td>
+    `;
+    tbody.prepend(tr);
+
+    // Limpa e fecha form
+    document.getElementById('s-exercicios').value = '';
+    document.getElementById('s-dor').value = '';
+    document.getElementById('form-sessao').style.display = 'none';
+
+    // Atualiza dor recente nos stats
+    atualizarStatDor(s.dor);
+
+  } catch(e) {
+    showToast('error', 'Erro de conexão.');
+  }
+}
+
+function atualizarStatDor(dor) {
+  const stats = document.getElementById('det-stats');
+  const pills = stats.querySelectorAll('.stat-pill');
+  if (pills[2]) pills[2].querySelector('.s-val').textContent = dor + '/10';
+}
+
+// ═══════════════════════════════════════════════════
+// SALVAR PRONTUÁRIO (NOVO CADASTRO)
+// ═══════════════════════════════════════════════════
+async function salvarProntuario() {
+  const statusEl = document.getElementById('statusCadastro');
+
+  const campos = {
+    nome:       document.getElementById('f-nome').value.trim(),
+    cpf:        document.getElementById('f-cpf').value.trim(),
+    nascimento: document.getElementById('f-nasc').value,
+    protocolo:  document.getElementById('f-protocolo').value.trim(),
+    queixa:     document.getElementById('f-queixa').value.trim(),
+    observacoes:document.getElementById('f-obs').value.trim(),
+    pressao:    document.getElementById('f-pressao').value.trim(),
+    temperatura:document.getElementById('f-temp').value,
+    fc:         document.getElementById('f-fc').value
+  };
+
+  // Validação básica client-side
+  if (!campos.nome || !campos.cpf || !campos.nascimento || !campos.queixa || !campos.pressao || !campos.temperatura || !campos.fc) {
+    statusEl.innerHTML = '<div style="padding:12px 16px; background:var(--red-lt); color:var(--red); border-radius:8px; margin-bottom:16px; font-weight:600;">Preencha todos os campos obrigatórios.</div>';
+    return;
+  }
+
+  try {
+    const resp = await fetch('/prontuario', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(campos)
+    });
+
+    const resultado = await resp.json();
+
+    if (!resp.ok) {
+      statusEl.innerHTML = `<div style="padding:12px 16px; background:var(--red-lt); color:var(--red); border-radius:8px; margin-bottom:16px; font-weight:600;">${resultado.erro}</div>`;
+      return;
+    }
+
+    statusEl.innerHTML = '<div style="padding:12px 16px; background:var(--green-lt); color:var(--green); border-radius:8px; margin-bottom:16px; font-weight:600;">✓ Prontuário salvo com sucesso!</div>';
+    limparFormulario();
+    setTimeout(() => { statusEl.innerHTML = ''; irPara('screen-lista'); }, 1500);
+
+  } catch(e) {
+    statusEl.innerHTML = '<div style="padding:12px 16px; background:var(--red-lt); color:var(--red); border-radius:8px; margin-bottom:16px; font-weight:600;">Erro de conexão com servidor.</div>';
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// DELETAR PACIENTE
+// ═══════════════════════════════════════════════════
+async function deletar(cpf) {
+  if (!confirm('Deseja realmente apagar este cadastro?')) return;
+  try {
+    await fetch(`/deletar/${cpf}`, { method: 'DELETE' });
+    showToast('success', 'Cadastro removido.');
+    carregarLista();
+  } catch(e) {
+    showToast('error', 'Erro ao deletar.');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════════
+function limparFormulario() {
+  ['f-nome','f-cpf','f-nasc','f-protocolo','f-queixa','f-obs','f-pressao','f-temp','f-fc']
+    .forEach(id => { document.getElementById(id).value = ''; });
+}
+
+// ─── INIT ───
+carregarLista();
+</script>
+</body>
+</html>
