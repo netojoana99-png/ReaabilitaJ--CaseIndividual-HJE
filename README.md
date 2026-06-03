@@ -1,55 +1,57 @@
-ReabilitaJá – Portal do Fisioterapeuta
-Descrição do Projeto
+# SaúdeConectada Nordeste – Sistema de Monitoramento de Pacientes
 
-O Portal do Fisioterapeuta é uma aplicação web desenvolvida para o case ReabilitaJá. O sistema permite que fisioterapeutas acompanhem a evolução dos pacientes em reabilitação, consultem o histórico recente de sessões e registrem observações clínicas. Além disso, o sistema implementa uma trilha de auditoria para registrar acessos e ações realizadas, atendendo às exigências de governança e rastreabilidade dos hospitais parceiros.
+## Descrição do Projeto
 
-Funcionalidades
+O SaúdeConectada Nordeste é uma aplicação web desenvolvida para auxiliar profissionais da saúde no acompanhamento remoto de pacientes. O sistema permite cadastrar pacientes, registrar sinais vitais, armazenar observações clínicas e consultar o histórico de atendimentos de forma simples e organizada.
 
-O sistema disponibiliza uma tela de listagem de pacientes contendo nome, protocolo em andamento, última sessão concluída e nível de dor mais recente. Também permite visualizar o histórico das últimas sete sessões de cada paciente, incluindo informações sobre exercícios realizados e dor relatada.
+A plataforma foi projetada para facilitar o monitoramento contínuo dos pacientes, centralizando informações importantes em um único ambiente digital e possibilitando acesso rápido aos dados clínicos registrados.
 
-Os fisioterapeutas podem registrar observações clínicas diretamente pelo portal, recebendo uma confirmação visual sem necessidade de recarregar a página. Todas as ações relevantes são registradas em uma trilha de auditoria para garantir rastreabilidade e conformidade com os requisitos do projeto.
+## Funcionalidades
 
-Tecnologias Utilizadas
+O sistema oferece as seguintes funcionalidades:
 
-O backend foi desenvolvido em Python utilizando Flask e Flask-CORS para disponibilização da API. O frontend foi construído com HTML, CSS e JavaScript, utilizando a Fetch API para comunicação assíncrona com o servidor. Os dados são armazenados em arquivos JSON para simplificar a implementação do MVP.
+* Cadastro de pacientes.
+* Registro de sinais vitais, incluindo:
 
-Estrutura do Projeto
+  * Frequência cardíaca.
+  * Pressão arterial.
+  * Saturação de oxigênio.
+  * Temperatura corporal.
+  * Frequência respiratória.
+  * Glicemia.
+* Registro de observações clínicas.
+* Visualização detalhada dos dados de cada paciente.
+* Consulta do histórico de atendimentos.
+* Atualização em tempo real através de requisições assíncronas.
+* Armazenamento persistente dos dados em arquivos JSON.
 
-O projeto é composto pelo arquivo principal da aplicação Flask, arquivos JSON responsáveis pelo armazenamento dos pacientes, observações e registros de auditoria, além da pasta de arquivos estáticos contendo a interface web. Também estão presentes os arquivos de configuração, documentação e gerenciamento de dependências.
+## Tecnologias Utilizadas
 
-Como Executar o Projeto
+### Backend
 
-Para executar o sistema localmente é necessário possuir Python 3 instalado. Após clonar o repositório, as dependências devem ser instaladas através do arquivo requirements.txt. Em seguida, basta executar o arquivo principal da aplicação e acessar o endereço local disponibilizado pelo Flask através do navegador.
+* Python
+* Flask
+* Flask-CORS
 
-Rotas Disponíveis
+### Frontend
 
-A API disponibiliza três rotas principais:
+* HTML5
+* CSS3
+* JavaScript
+* Fetch API
 
-GET /pacientes: retorna a lista de pacientes cadastrados.
-GET /pacientes/<id>/historico: retorna o histórico das últimas sete sessões do paciente selecionado.
-POST /pacientes/<id>/observacao: registra uma observação clínica associada ao paciente, incluindo o identificador do fisioterapeuta e o horário da ação.
-Trilha de Auditoria
+### Persistência de Dados
 
-Para atender às exigências dos hospitais parceiros, o sistema registra informações sobre os acessos realizados pelos fisioterapeutas. Cada registro contém o profissional responsável pela ação, o paciente acessado, o recurso utilizado, a operação realizada e o momento exato em que ocorreu. Essa funcionalidade aumenta a transparência e auxilia na conformidade com requisitos de governança e proteção de dados.
+* Arquivos JSON
 
-Arquivos de Configuração
-
-O projeto inclui um arquivo .env.example contendo as variáveis de ambiente necessárias para execução local e um arquivo .gitignore configurado para impedir o versionamento de informações sensíveis, ambientes virtuais e arquivos temporários.
-
-Controle de Versão
-
-O desenvolvimento foi documentado utilizando o padrão Conventional Commits, garantindo um histórico de alterações claro, rastreável e alinhado às boas práticas de engenharia de software.
+## Estrutura do Projeto
 
 ```text
-reabilitaja-portal/
+saudeconectada-nordeste/
 │
 ├── app.py
-├── pacientes.json
-├── observacoes.json
-├── auditoria.json
+├── prontuarios.json
 ├── requirements.txt
-├── .env.example
-├── .gitignore
 ├── README.md
 │
 └── static/
@@ -60,51 +62,83 @@ reabilitaja-portal/
 
 ## Pré-requisitos
 
-- Python 3.10 ou superior
-- Pip instalado
+* Python 3.10 ou superior
+* Pip instalado
 
 ## Como Executar o Projeto
 
 1. Clonar o repositório.
 2. Acessar a pasta do projeto.
-3. Instalar as dependências com `pip install -r requirements.txt`.
-4. Executar a aplicação com `python app.py`.
-5. Abrir o navegador e acessar `http://localhost:5000`.
+3. Instalar as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Executar a aplicação:
+
+```bash
+python app.py
+```
+
+5. Abrir o navegador e acessar:
+
+```text
+http://localhost:5000
+```
 
 ## Rotas Disponíveis
 
-### GET /pacientes
-Retorna a lista de pacientes cadastrados.
+### GET /api/pacientes
 
-### GET /pacientes/<id>/historico
-Retorna as últimas 7 sessões do paciente selecionado.
+Retorna a lista completa de pacientes cadastrados.
 
-### POST /pacientes/<id>/observacao
-Registra uma observação clínica contendo o identificador do fisioterapeuta, a observação realizada e o timestamp da ação.
+### GET /api/pacientes/<id>
 
-## Trilha de Auditoria
+Retorna os dados detalhados de um paciente específico.
 
-O sistema registra as ações realizadas pelos fisioterapeutas para garantir rastreabilidade e conformidade com as exigências dos hospitais parceiros. Cada registro contém:
+### POST /api/pacientes
 
-- Identificador do fisioterapeuta.
-- Paciente acessado.
-- Recurso acessado.
-- Ação realizada.
-- Data e hora da ação.
+Realiza o cadastro de um novo paciente.
+
+### PUT /api/pacientes/<id>
+
+Atualiza as informações de um paciente existente.
+
+### DELETE /api/pacientes/<id>
+
+Remove um paciente do sistema.
+
+## Dados Armazenados
+
+Cada paciente pode possuir os seguintes registros:
+
+* Nome completo.
+* Idade.
+* Sexo.
+* Diagnóstico.
+* Frequência cardíaca.
+* Pressão arterial.
+* Saturação de oxigênio.
+* Temperatura corporal.
+* Frequência respiratória.
+* Glicemia.
+* Observações clínicas.
+* Data e hora do registro.
 
 ## Arquivos de Configuração
 
-### .env.example
+### requirements.txt
 
-Contém as variáveis de ambiente necessárias para execução local do projeto.
+Contém todas as dependências necessárias para execução do projeto.
 
-### .gitignore
+### prontuarios.json
 
-Impede o versionamento de arquivos sensíveis, ambientes virtuais e arquivos temporários.
+Arquivo responsável pelo armazenamento persistente dos dados dos pacientes.
 
-## Histórico de Commits
+## Objetivo do Projeto
 
-O desenvolvimento foi documentado utilizando o padrão Conventional Commits para garantir rastreabilidade das alterações realizadas ao longo do projeto.
+O sistema foi desenvolvido com o objetivo de demonstrar uma solução simples e funcional para monitoramento remoto de pacientes, permitindo que profissionais da saúde acompanhem informações clínicas importantes de maneira centralizada e acessível.
 
 ## Autor
 
