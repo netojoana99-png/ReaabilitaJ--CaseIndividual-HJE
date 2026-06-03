@@ -108,4 +108,4 @@ O desenvolvimento foi documentado utilizando o padrão Conventional Commits para
 
 ## Autor
 
-Projeto desenvolvido para o Case ReabilitaJá – Programa de Trainee.
+Joana Mascarenhas Nogueira Neto
