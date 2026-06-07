@@ -10,39 +10,39 @@ A plataforma foi projetada para facilitar o monitoramento contínuo dos paciente
 
 O sistema oferece as seguintes funcionalidades:
 
-* Cadastro de pacientes.
-* Registro de sinais vitais, incluindo:
+Cadastro de pacientes.
+Registro de sinais vitais, incluindo:
 
-  * Frequência cardíaca.
-  * Pressão arterial.
-  * Saturação de oxigênio.
-  * Temperatura corporal.
-  * Frequência respiratória.
-  * Glicemia.
-* Registro de observações clínicas.
-* Visualização detalhada dos dados de cada paciente.
-* Consulta do histórico de atendimentos.
-* Atualização em tempo real através de requisições assíncronas.
-* Armazenamento persistente dos dados em arquivos JSON.
+Frequência cardíaca.
+Pressão arterial.
+Saturação de oxigênio.
+Temperatura corporal.
+Frequência respiratória.
+Glicemia.
+Registro de observações clínicas.
+Visualização detalhada dos dados de cada paciente.
+Consulta do histórico de atendimentos.
+Atualização em tempo real através de requisições assíncronas.
+Armazenamento persistente dos dados em arquivos JSON.
 
 ## Tecnologias Utilizadas
 
 ### Backend
 
-* Python
-* Flask
-* Flask-CORS
+Python
+Flask
+Flask-CORS
 
 ### Frontend
 
-* HTML5
-* CSS3
-* JavaScript
-* Fetch API
+HTML5
+CSS3
+JavaScript
+Fetch API (é uma interface do JavaScript que permite fazer requisições HTTP de forma assíncrona. Ela é amplamente utilizada para buscar dados de servidores ou enviar informações, permitindo atualizar partes de uma página web sem precisar recarregá-la inteira)
 
 ### Persistência de Dados
 
-* Arquivos JSON
+Arquivos JSON
 
 ## Estrutura do Projeto
 
@@ -62,8 +62,8 @@ saudeconectada-nordeste/
 
 ## Pré-requisitos
 
-* Python 3.10 ou superior
-* Pip instalado
+Python 3.10 ou superior
+Pip instalado
 
 ## Como Executar o Projeto
 
@@ -113,18 +113,18 @@ Remove um paciente do sistema.
 
 Cada paciente pode possuir os seguintes registros:
 
-* Nome completo.
-* Idade.
-* Sexo.
-* Diagnóstico.
-* Frequência cardíaca.
-* Pressão arterial.
-* Saturação de oxigênio.
-* Temperatura corporal.
-* Frequência respiratória.
-* Glicemia.
-* Observações clínicas.
-* Data e hora do registro.
+Nome completo.
+Idade.
+Sexo.
+Diagnóstico.
+Frequência cardíaca.
+Pressão arterial.
+Saturação de oxigênio.
+Temperatura corporal.
+Frequência respiratória.
+Glicemia.
+Observações clínicas.
+Data e hora do registro.
 
 ## Arquivos de Configuração
 
