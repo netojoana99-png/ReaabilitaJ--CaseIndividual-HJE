@@ -9,18 +9,10 @@ CORS(app)
 
 ARQUIVO = 'prontuarios.json'
 
-# =========================
-# CRIAR JSON SE NÃO EXISTIR
-# =========================
-
 if not os.path.exists(ARQUIVO):
     with open(ARQUIVO, 'w') as f:
         json.dump([], f)
 
-
-# =========================
-# FUNÇÕES AUXILIARES
-# =========================
 
 def ler_dados():
     with open(ARQUIVO, 'r') as f:
@@ -43,19 +35,9 @@ def limpar_cpf(cpf):
     return ''.join(filter(str.isdigit, cpf))
 
 
-# =========================
-# FRONTEND
-# =========================
-
 @app.route('/')
 def home():
     return send_from_directory('static', 'index.html')
-
-
-# =========================
-# POST /prontuario
-# Cria paciente com dados base
-# =========================
 
 @app.route('/prontuario', methods=['POST'])
 def criar_prontuario():
@@ -111,10 +93,6 @@ def criar_prontuario():
     return jsonify({'mensagem': 'Prontuário salvo'}), 201
 
 
-# =========================
-# GET /prontuarios
-# Retorna lista com campos resumidos
-# =========================
 
 @app.route('/prontuarios', methods=['GET'])
 def listar_prontuarios():
@@ -136,11 +114,6 @@ def listar_prontuarios():
     return jsonify(resumo), 200
 
 
-# =========================
-# GET /prontuarios/<cpf>
-# Retorna detalhe completo do paciente
-# =========================
-
 @app.route('/prontuarios/<cpf>', methods=['GET'])
 def buscar_paciente(cpf):
     cpf_limpo = limpar_cpf(cpf)
@@ -159,12 +132,6 @@ def buscar_paciente(cpf):
         'anotacoes': anotacoes
     }), 200
 
-
-# =========================
-# POST /sessao/<cpf>
-# Registra uma sessão de reabilitação
-# Payload: { exercicios: "...", dor: 0-10 }
-# =========================
 
 @app.route('/sessao/<cpf>', methods=['POST'])
 def registrar_sessao(cpf):
@@ -198,22 +165,8 @@ def registrar_sessao(cpf):
     return jsonify({'mensagem': 'Sessão registrada', 'sessao': nova_sessao}), 201
 
 
-# =========================
-# POST /anotacao/<cpf>
-# Salva anotação clínica sem recarregar
-# Payload: { texto: "..." }
-#
-# O frontend chama este endpoint via fetch():
-#
-#   const resp = await fetch(`/anotacao/${cpf}`, {
-#       method: 'POST',
-#       headers: { 'Content-Type': 'application/json' },
-#       body: JSON.stringify({ texto: textoAnotacao })
-#   });
-#   const resultado = await resp.json();
-#   // Atualiza UI sem reload com resultado.anotacao
-#
-# =========================
+
+
 
 @app.route('/anotacao/<cpf>', methods=['POST'])
 def salvar_anotacao(cpf):
@@ -239,9 +192,7 @@ def salvar_anotacao(cpf):
     return jsonify({'mensagem': 'Anotação salva', 'anotacao': nova_anotacao}), 201
 
 
-# =========================
-# DELETE /deletar/<cpf>
-# =========================
+
 
 @app.route('/deletar/<cpf>', methods=['DELETE'])
 def deletar(cpf):
@@ -252,7 +203,7 @@ def deletar(cpf):
     return jsonify({'mensagem': 'Paciente deletado'}), 200
 
 
-# =========================
+
 
 if __name__ == '__main__':
     print('🚀 Servidor rodando em http://127.0.0.1:5000')
